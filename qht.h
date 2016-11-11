@@ -22,9 +22,17 @@ typedef struct qht {
   uint32_t num_buckets;
 } qht;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 qht *qht_init(uint32_t nb);
 void *qht_lookup(qht *table, uint32_t hash);
 bool qht_insert(qht *table, uint32_t key, void *value);
 bool qht_delete(qht *table, uint32_t hash);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
