@@ -18,13 +18,13 @@ typedef struct qht_bucket {
 } qht_bucket;
 
 typedef struct qht {
-  qht_bucket *buckets;
+  qht_bucket **buckets;
   uint32_t num_buckets;
 } qht;
 
 qht *qht_init(uint32_t nb);
 void *qht_lookup(qht *table, uint32_t hash);
-bool qht_insert(qht *table, void *value, uint32_t key);
+bool qht_insert(qht *table, uint32_t key, void *value);
 bool qht_delete(qht *table, uint32_t hash);
 
 #endif
