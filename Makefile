@@ -1,6 +1,6 @@
-CFLAGS = -std=c11 -ggdb3
+CFLAGS = -std=c11 -ggdb3 -O2
 LIBFLAGS = -fPIC
-CXXFLAGS = -std=c++11 -ggdb3
+CXXFLAGS = -std=c++11 -ggdb3 -O2
 LDFLAGS = -lqht -lpthread -L./
 
 all: libqht bench
