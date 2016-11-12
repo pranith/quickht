@@ -1,17 +1,22 @@
-CFLAGS = -std=c11 -fPIC -O0 -g
-LDFLAGS = -lqht -L./
+CFLAGS = -std=c11 -ggdb3
+LIBFLAGS = -fPIC
+CXXFLAGS = -std=c++11 -ggdb3
+LDFLAGS = -lqht -lpthread -L./
 
 all: libqht bench
 .phony: all
 
 %.o: %.c
-	$(CC) -c $< $(CFLAGS)
+	$(CC) -c $< $(CFLAGS) $(LIBFLAGS)
+
+%.o: %.cc
+	$(CXX) -c $< $(CXXFLAGS)
 
 libqht: qht.o
 	$(CC) -shared -o $@.so $<
 
 bench: bench.o libqht
-	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
 clean:
 	rm -f libqht.so *.o
