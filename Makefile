@@ -6,10 +6,10 @@ LDFLAGS = -lqht -lpthread -L./
 all: libqht bench
 .phony: all
 
-%.o: %.c
+%.o: %.c qht.h
 	$(CC) -c $< $(CFLAGS) $(LIBFLAGS)
 
-%.o: %.cc
+%.o: %.cc qht.h
 	$(CXX) -c $< $(CXXFLAGS)
 
 libqht: qht.o
