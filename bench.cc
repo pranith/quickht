@@ -29,13 +29,14 @@ void thread_fn(qht *table, int tid, int update)
   }
 }
 
-void print_stats(void)
+void print_stats(int threads)
 {
   #if STATS
   std::cout << "Comparisons: " << comp_counter << std::endl;
   std::cout << "Buckets touched: " << bucket_lookup_counter+ \
                                       bucket_insert_counter+ \
                                       bucket_delete_counter << std::endl;
+  std::cout << "Operations: " << ENTRIES_PER_THREAD * threads << std::endl;
   #endif
 }
 
@@ -88,5 +89,5 @@ int main(int argc, char **argv)
     threads[i]->join();
   }
 
-  print_stats();
+  print_stats(nthreads);
 }
