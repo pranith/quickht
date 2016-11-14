@@ -26,10 +26,12 @@ void *qht_search(qht_bucket *bucket, uint32_t key, int num_entries)
 
   while (curr_bucket) {
     for (int i = 0; i < num_entries; i++) {
+      STAT_INC(comp_counter);
       if (curr_bucket->keys[i] == key)
 	return curr_bucket->values[i];
     }
     curr_bucket = curr_bucket->next;
+    STAT_INC(bucket_lookup_counter);
   }
 
   /* key not found */
@@ -60,6 +62,7 @@ bool insert_in_bucket(qht_bucket *bucket, uint32_t key, void *ptr)
   qht_bucket *curr_bucket = bucket, *prev_bucket;
   while (curr_bucket) {
     for (int i = 0; i < PER_BUCKET; i++) {
+      STAT_INC(comp_counter);
       if (curr_bucket->values[i] == ptr)
 	return false;
     
@@ -71,6 +74,7 @@ bool insert_in_bucket(qht_bucket *bucket, uint32_t key, void *ptr)
     }
     prev_bucket = curr_bucket;
     curr_bucket = curr_bucket->next;
+    STAT_INC(bucket_insert_counter);
   }
   
   // insertion failed
@@ -102,14 +106,21 @@ bool qht_insert(qht *table, uint32_t key, void *value)
 
 bool delete_from_bucket(qht_bucket *bucket, uint32_t key)
 {
-  for (int i = 0; i < PER_BUCKET; i++) {
-    if (bucket->keys[i] == key) {
-      bucket->keys[i] = 0;
-      bucket->values[i] = NULL;
-      return true;
+  qht_bucket *curr_bucket = bucket, *prev_bucket;
+  while (curr_bucket) {
+    for (int i = 0; i < PER_BUCKET; i++) {
+      STAT_INC(comp_counter);
+      if (bucket->keys[i] == key) {
+	bucket->keys[i] = 0;
+	bucket->values[i] = NULL;
+	return true;
+      }
     }
+    prev_bucket = curr_bucket;
+    curr_bucket = curr_bucket->next;
+    STAT_INC(bucket_lookup_counter);
   }
-
+ 
   return false;
 }
 

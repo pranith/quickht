@@ -8,6 +8,13 @@
 #include "seqlock.h"
 
 #define PER_BUCKET 6
+#define STATS 1
+
+#if STATS
+#define STAT_INC(x) __atomic_add_fetch(&x, 1, __ATOMIC_SEQ_CST);
+#else
+#define STAT_INC(x)
+#endif
 
 typedef struct qht_bucket {
   pthread_mutex_t   lock;
@@ -25,6 +32,11 @@ typedef struct qht {
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+uint64_t comp_counter = 0;
+uint64_t bucket_lookup_counter = 0;
+uint64_t bucket_insert_counter = 0;
+uint64_t bucket_delete_counter = 0;
 
 qht *qht_init(uint32_t nb);
 void *qht_lookup(qht *table, uint32_t hash);
