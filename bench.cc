@@ -7,25 +7,23 @@
 #include <thread>
 #include <atomic>
 
-#define ENTRIES_PER_THREAD 10000
+#define ENTRIES_PER_THREAD 100000
 
 std::atomic<bool> threads_spawned(false);
 
 void thread_fn(qht *table, int tid, int update)
 {
-  uint32_t key = 0xFF >> tid;
-
   while (!threads_spawned);
 
   for (int operations = 0; operations < ENTRIES_PER_THREAD/100; operations++) {
     for (int ops = 0; ops < 100; ops++) {
+      uint32_t key = tid * 1000000 + operations * 1000 + ops + 1;
       if (ops < update) {
         // insert
-        qht_insert(table, key+operations*1000+ops,
-            (void*)((uint64_t)key+operations*1000+ops));
+        assert(qht_insert(table, key, (void *)(uint64_t)key) == true);
       } else {
         // read
-        qht_lookup(table, key+operations*1000+ops);
+        qht_lookup(table, key);
       }
     }
   }
@@ -45,7 +43,7 @@ int main(int argc, char **argv)
 
   std::thread **threads;
 
-  qht *table = qht_init(1000000);
+  qht *table = qht_init(100000);
 
   int c = 0, nthreads = 0;
   int update = 0;
