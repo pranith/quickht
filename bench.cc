@@ -7,7 +7,7 @@
 #include <thread>
 #include <atomic>
 
-#define ENTRIES_PER_THREAD 100000
+#define ENTRIES_PER_THREAD 1000
 
 std::atomic<bool> threads_spawned(false);
 
@@ -16,7 +16,7 @@ void thread_fn(qht *table, int tid, int update)
   while (!threads_spawned);
 
   for (int operations = 0; operations < ENTRIES_PER_THREAD/100; operations++) {
-    for (int ops = 0; ops < 100; ops++) {
+    for (int ops = 0; ops < 100000; ops++) {
       uint32_t key = tid * 1000000 + operations * 1000 + ops + 1;
       if (ops < update) {
         // insert
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 
   std::thread **threads;
 
-  qht *table = qht_init(100000);
+  qht *table = qht_init(10000);
 
   int c = 0, nthreads = 0;
   int update = 0;
