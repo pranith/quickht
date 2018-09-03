@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "seqlock.h"
 
@@ -33,18 +34,20 @@ typedef struct qht {
 extern "C" {
 #endif
 
-uint64_t comp_counter = 0;
-uint64_t bucket_lookup_counter = 0;
-uint64_t bucket_insert_counter = 0;
-uint64_t bucket_delete_counter = 0;
+static uint64_t comp_counter = 0;
+static uint64_t bucket_lookup_counter = 0;
+static uint64_t bucket_insert_counter = 0;
+static uint64_t bucket_delete_counter = 0;
 
+void qht_free(qht *table);
 qht *qht_init(uint32_t nb);
 void *qht_lookup(qht *table, uint32_t hash);
 bool qht_insert(qht *table, uint32_t key, void *value);
 bool qht_delete(qht *table, uint32_t hash);
+void qht_print_stats(int threads, int ENTRIES_PER_THREAD);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif /* __QHT__ */

@@ -3,6 +3,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+void qht_free(qht *table)
+{
+  for (uint32_t i = 0; i < table->num_buckets; i++) {
+    qht_bucket *p = table->buckets[i]->next;
+    while (p != NULL) {
+      qht_bucket *tmp = p->next;
+      free(p);
+      p = tmp;
+    }
+    free(table->buckets[i]);
+  }
+
+  free(table->buckets);
+  free(table);
+}
+
 qht *qht_init(uint32_t nb)
 {
   qht *table = (qht *)malloc(sizeof(qht));
@@ -136,3 +152,16 @@ bool qht_delete(qht *table, uint32_t key)
   
   return success;
 }
+
+void qht_print_stats(int threads, int ENTRIES_PER_THREAD)
+{
+  #if STATS
+  printf("Comparisons: %lu\n", comp_counter);
+  printf("Buckets touched: %lu\n", bucket_lookup_counter+ \
+                                   bucket_insert_counter+ \
+                                   bucket_delete_counter);
+  printf("Operations: %lu\n", ENTRIES_PER_THREAD * threads);
+  #endif
+}
+
+
