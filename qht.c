@@ -1,3 +1,9 @@
+/* Quick Hash Table
+ *
+ * A lock-free hash table implementation using atomics and sequence
+ * locks.
+ */
+
 #include "qht.h"
 
 #include <stdlib.h>
