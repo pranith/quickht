@@ -14,6 +14,11 @@ ifeq (${RISCV}, 1)
 	CXXFLAGS+=-march=rv64imafd
 endif
 
+ifeq (${ARM64}, 1)
+	CC=aarch64-linux-gnu-gcc
+	CXX=aarch64-linux-gnu-g++
+endif
+
 all: libqht bench
 .phony: all
 
