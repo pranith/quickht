@@ -28,13 +28,13 @@ void qht_free(qht *table)
 qht *qht_init(uint32_t nb)
 {
   qht *table = (qht *)malloc(sizeof(qht));
+  memset(table, 0, sizeof(qht));
   table->buckets = (qht_bucket **)malloc(nb * sizeof(qht_bucket *));
   table->num_buckets = nb;
 
   for (uint32_t i = 0; i < nb; i++) {
     table->buckets[i] = (qht_bucket *)malloc(sizeof(qht_bucket));
-    memset(table->buckets[i]->keys, 0, sizeof(uint32_t) * PER_BUCKET);
-    memset(table->buckets[i]->values, 0, sizeof(void *) * PER_BUCKET);
+    memset(table->buckets[i], 0, sizeof(qht_bucket));
     pthread_mutex_init(&table->buckets[i]->lock, NULL);
     table->buckets[i]->next = NULL;
   }
@@ -101,8 +101,7 @@ bool insert_in_bucket(qht_bucket *bucket, uint32_t key, void *ptr)
   
   // insertion failed
   prev_bucket->next = (qht_bucket *)malloc(sizeof(qht_bucket));
-  memset(prev_bucket->next->keys, 0, sizeof(uint32_t) * PER_BUCKET);
-  memset(prev_bucket->next->values, 0, sizeof(void *) * PER_BUCKET);
+  memset(prev_bucket->next, 0, sizeof(qht_bucket));
   pthread_mutex_init(&prev_bucket->next->lock, NULL);
   prev_bucket->next->keys[0] = key;
   prev_bucket->next->values[0] = ptr;
