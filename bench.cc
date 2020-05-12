@@ -7,7 +7,10 @@
 #include <thread>
 #include <atomic>
 
-#define ENTRIES_PER_THREAD 64
+#define KB(x) ((x) << 10)
+#define MB(x) ((x) << 20)
+
+#define ENTRIES_PER_THREAD (KB(8) / sizeof(qht_bucket))
 #define OPERATIONS_PER_THREAD 10000
 
 std::atomic<bool> threads_spawned(false);
@@ -44,7 +47,7 @@ int main(int argc, char **argv)
 
   std::thread **threads;
 
-  qht *table = qht_init(128);
+  qht *table = qht_init(32);
 
   int c = 0, nthreads = 0;
   int update = 0;
