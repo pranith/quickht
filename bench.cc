@@ -85,6 +85,6 @@ int main(int argc, char **argv)
 
   delete [] threads;
 
-  qht_print_stats(nthreads, ENTRIES_PER_THREAD);
+  qht_print_stats(nthreads, OPERATIONS_PER_THREAD);
   qht_free(table);
 }
