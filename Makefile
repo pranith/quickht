@@ -1,7 +1,7 @@
 CFLAGS = -std=c11 -ggdb3 -O2
 LIBFLAGS = -fPIC
 CXXFLAGS = -std=c++11 -ggdb3 -O2
-LDFLAGS = -L./ -lqht -lpthread
+LDFLAGS = -L./ -lqht -Wl,--whole-archive -lpthread -Wl,--no-whole-archive
 
 ifeq (${STATIC}, 1)
 	LDFLAGS+=-static
