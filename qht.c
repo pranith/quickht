@@ -165,7 +165,7 @@ void qht_print_stats(int threads, int ENTRIES_PER_THREAD)
   printf("Buckets touched: %lu\n", bucket_lookup_counter+ \
                                    bucket_insert_counter+ \
                                    bucket_delete_counter);
-  printf("Operations: %lu\n", ENTRIES_PER_THREAD * threads);
+  printf("Operations: %d\n", ENTRIES_PER_THREAD * threads);
   #endif
 }
 

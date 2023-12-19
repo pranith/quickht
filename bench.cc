@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 {
   if (argc < 3) {
     std::cout << "Usage: " << argv[0] << " --threads(-t) threads --update(-u)" << std::endl;
-    exit(1);
+    //exit(1);
   }
 
   static struct option long_options[] = {
@@ -45,8 +45,8 @@ int main(int argc, char **argv)
 
   qht *table = qht_init(100000);
 
-  int c = 0, nthreads = 0;
-  int update = 0;
+  int c = 0, nthreads = 1;
+  int update = 10;
   while((c = getopt_long(argc, argv, "ht:u:", long_options, NULL)) != -1) {
     switch (c) {
       case 't':
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
         break;
       default:
         std::cout << "Usage: " << argv[0] << " --threads(-t) threads --update(-u)" << std::endl;
-        exit(1);
+        //exit(1);
     }
   }
 
